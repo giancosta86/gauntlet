@@ -1,0 +1,11 @@
+{
+  "description": "",
+
+  "maintainers": ["Gianluca Costa <gianluca@gianlucacosta.info>"],
+
+  "homepage": "https://github.com/giancosta86/gauntlet",
+
+  "dependencies": ["github.com/giancosta86/ethereal@v1"],
+
+  "devDependencies": ["github.com/giancosta86/velvet@v4"]
+}
