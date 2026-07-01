@@ -3,26 +3,20 @@ use path
 use str
 use github.com/giancosta86/ethereal/v1/lang
 use github.com/giancosta86/ethereal/v1/seq
+use ./gauntlet
+
+var input = (gauntlet:load-context-module input)
 
 fn string { |&optional=$false name|
-  if (not (has-env $name)) {
-    fail 'The following environment variable was not passed: '$name
-  }
-
-  var value = (
-    get-env $name |
-      str:trim-space (all)
-  )
-
-  if (seq:is-non-empty $value) {
-    put $value
-  } else {
-    if $optional {
-      put $nil
-    } else {
-      fail 'Missing input: '$name
+  input:get-string $name |
+    lang:map str:trim-space~ |
+    lang:otherwise {
+      if $optional {
+        put $nil
+      } else {
+        fail 'Missing input: '$name
+      }
     }
-  }
 }
 
 fn -parse { |&optional=$false name parser|
