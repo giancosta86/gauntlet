@@ -1,4 +1,6 @@
-fn get-context {
+use builtin
+
+fn detect {
   if (eq $E:GITHUB_ACTIONS true) {
     put github
   } else {
@@ -6,12 +8,12 @@ fn get-context {
   }
 }
 
-fn load-context-module { |module-name|
-  var context = (get-context)
+fn use-mod { |module-name|
+  var context = (detect)
 
   if (not $context) {
     fail 'Cannot detect the CI/CD context!'
   }
 
-  use-mod './'$context'/'$module-name
+  builtin:use-mod './'$context'/'$module-name
 }

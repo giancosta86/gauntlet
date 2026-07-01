@@ -1,12 +1,16 @@
 use github.com/giancosta86/ethereal/v1/lang
-use ./out-shared
+use github.com/giancosta86/ethereal/v1/map
+use ./context
+
+var output: = (context:use-mod output)
+var values: = (context:use-mod value)
 
 fn write { |key value|
-  out-shared:write (get-env GITHUB_OUTPUT) $key $value
+  values:elvish-to-context $value |
+    env:write $key (all)
 }
 
 fn map { |@arguments|
-  var source-map = (lang:get-single-input $arguments)
-
-  out-shared:map (get-env GITHUB_OUTPUT) $source-map
+  lang:get-single-input $arguments |
+    map:iterate $source-map $write~
 }

@@ -3,9 +3,9 @@ use path
 use str
 use github.com/giancosta86/ethereal/v1/lang
 use github.com/giancosta86/ethereal/v1/seq
-use ./gauntlet
+use ./context
 
-var input = (gauntlet:load-context-module input)
+var input: = (context:use-mod input)
 
 fn string { |&optional=$false name|
   input:get-string $name |

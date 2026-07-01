@@ -1,4 +1,4 @@
-use ../gauntlet
+use ../context
 
 fn -unset-all-contexts {
   unset-env GITHUB_ACTIONS
@@ -9,7 +9,7 @@ fn -set-github-context {
 }
 
 fn within { |context block|
-  var previous-context = (gauntlet:get-context)
+  var previous-context = (context:detect)
 
   -unset-all-contexts
 
