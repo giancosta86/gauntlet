@@ -1,10 +1,12 @@
-#TODO! Here, load action-references for the specific CI/CD
+use ./context
 
 pragma unknown-command = disallow
 
+var action-references: = (context:use-mod action-references)
+
 var grep~ = (external grep)
 
-fn find-in-other-branches {
+fn find-to-other-branches {
   var regex = (action-references:get-regex-for-references-to-other-branches $branch)
 
   var grep-outcome = ?(

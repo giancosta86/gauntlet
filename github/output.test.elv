@@ -24,8 +24,8 @@ use ./output
 
         to-lines < $temp-file |
           should-emit [
-             'alpha=Hello'
-             'beta=World'
+             alpha=Hello
+             beta=World
           ]
       }
     }
