@@ -5,7 +5,7 @@ use github.com/giancosta86/ethereal/v1/lang
 use github.com/giancosta86/ethereal/v1/seq
 use ./context
 
-var input: = (context:use-mod input)
+var input: = (src | context:use-dual-mod)
 
 fn string { |&optional=$false name|
   input:get-string $name |

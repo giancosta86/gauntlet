@@ -2,7 +2,7 @@ use github.com/giancosta86/ethereal/v1/lang
 use github.com/giancosta86/ethereal/v1/map
 use ./context
 
-var output: = (context:use-mod output)
+var output: = (src | context:use-dual-mod)
 var values: = (context:use-mod values)
 
 fn write { |key value|

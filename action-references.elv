@@ -1,17 +1,17 @@
+use github.com/giancosta86/ethereal/v1/seq
 use ./context
 
-pragma unknown-command = disallow
+var action-references: = (src | context:use-dual-mod)
 
-var action-references: = (context:use-mod action-references)
+fn get-to-other-branches {
+  put **.yaml |
+    seq:reduce [&] { |references-by-map source-path|
+      var other-references = [(action-references:get-to-other-branches $source-path)]
 
-var grep~ = (external grep)
-
-fn find-to-other-branches {
-  var regex = (action-references:get-regex-for-references-to-other-branches $branch)
-
-  var grep-outcome = ?(
-    grep --color=always --perl-regexp $regex **.yml > &2
-  )
-
-  eq $grep-outcome $ok
+      if (seq:is-non-empty $other-references) {
+        assoc $references-by-map $source-path $other-references
+      } else {
+        put $references-by-map
+      }
+    }
 }
