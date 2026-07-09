@@ -22,25 +22,30 @@ fn string { |&optional=$false name|
     }
 }
 
-fn -parse { |&optional=$false name parser|
-  string &optional=$optional $name |
-    lang:map $parser
+fn number { |&optional=$false name|
+  var string-value = (string &optional=$optional $name)
+
+  lang:map $string-value $num~
 }
 
 fn bool { |&optional=$false name|
-  -parse &optional=$optional $name { |value|
+  var string-value = (string &optional=$optional $name)
+
+  lang:map $string-value { |value|
     if (eq $value true) {
       put $true
     } elif (eq $value false) {
       put $false
     } else {
-      fail 'Invalid boolean value for the '''$name''' input: '''$value'''!'
+      fail 'Invalid bool value for the '''$name''' input: '''$value''''
     }
   }
 }
 
 fn enum { |&optional=$false name admissible-list|
-  -parse &optional=$optional $name { |value|
+  var string-value = (string &optional=$optional $name)
+
+  lang:map $string-value { |value|
     if (not (has-value $admissible-list $value)) {
       fail 'Invalid enum value for the '''$name''' input: '''$value'''!'
     }
@@ -50,11 +55,11 @@ fn enum { |&optional=$false name admissible-list|
 }
 
 fn list { |&separator=, name|
-  var value = (string &optional $name)
+  var string-value = (string &optional $name)
 
-  if $value {
+  if $string-value {
     put [(
-      str:split $separator $value |
+      str:split $separator $string-value |
         each $str:trim-space~ |
         keep-if $seq:is-non-empty~
     )]
@@ -64,17 +69,19 @@ fn list { |&separator=, name|
 }
 
 fn -file-system-input { |&optional=$false &can-be-missing=$false type-description name path-checker|
-  -parse &optional=$optional $name { |value|
-    var abs-path = (
-      path:abs $value
-    )
+  var string-value = (string &optional=$optional $name)
 
-    if (or $can-be-missing ($path-checker $abs-path)) {
-      put $abs-path
-    } else {
-      fail 'Inexistent '$type-description' for input '''$name''' at path: '''$abs-path'''!'
+  lang:map $string-value { |value|
+      var abs-path = (
+        path:abs $value
+      )
+
+      if (or $can-be-missing ($path-checker $abs-path)) {
+        put $abs-path
+      } else {
+        fail 'Inexistent '$type-description' for input '''$name''' at path: '''$abs-path'''!'
+      }
     }
-  }
 }
 
 fn directory { |&optional=$false &can-be-missing=$false name|
