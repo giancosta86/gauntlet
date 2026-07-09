@@ -9,7 +9,10 @@ var input: = (src | context:use-dual-mod)
 
 fn string { |&optional=$false name|
   input:get-string $name |
-    lang:map str:trim-space~ |
+    lang:map { |value|
+      str:trim-space $value |
+        seq:empty-to-default
+    } |
     lang:otherwise {
       if $optional {
         put $nil
