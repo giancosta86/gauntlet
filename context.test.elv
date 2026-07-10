@@ -51,7 +51,7 @@ var resources = (src | resources:for-script)
 
       var dual-module = (context:use-dual-mod $fake-src)
 
-      has-key $dual-module get-to-other-branches~ |
+      has-key $dual-module get-perl-regex-to-other-branches~ |
         should-be $true
     }
   }
