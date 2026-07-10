@@ -285,5 +285,175 @@ fake-context:within github {
         }
       }
     }
+
+    >> 'enum' {
+      var admissible = [alpha beta gamma]
+
+      >> 'when the input is missing' {
+        >> 'when mandatory' {
+          fails {
+            input:enum SOME-INEXISTING-VAR $admissible
+          } |
+            should-be 'Missing input: SOME-INEXISTING-VAR'
+        }
+
+        >> 'when optional' {
+          input:enum &optional SOME-INEXISTING-VAR $admissible |
+            should-be $nil
+        }
+      }
+
+      >> 'when the input is empty' {
+        tmp E:MY-VAR = ''
+
+        >> 'when mandatory' {
+          fails {
+            input:enum MY-VAR $admissible
+          } |
+            should-be 'Missing input: MY-VAR'
+        }
+
+        >> 'when optional' {
+          input:enum &optional MY-VAR $admissible |
+            should-be $nil
+        }
+      }
+
+      >> 'when the input is one of the values' {
+        tmp E:MY-VAR = $admissible[1]
+
+        >> 'when mandatory' {
+          input:enum MY-VAR $admissible |
+            should-be &strict $admissible[1]
+        }
+
+        >> 'when optional' {
+          input:enum &optional MY-VAR $admissible |
+            should-be &strict $admissible[1]
+        }
+      }
+
+      >> 'when the input is not one of the values' {
+        tmp E:MY-VAR = 'some-other-value'
+
+        >> 'when mandatory' {
+          fails {
+            input:enum MY-VAR $admissible
+          } |
+            should-be 'Invalid enum value for the ''MY-VAR'' input: ''some-other-value'''
+        }
+
+        >> 'when optional' {
+          fails {
+            input:enum &optional MY-VAR $admissible
+          } |
+            should-be 'Invalid enum value for the ''MY-VAR'' input: ''some-other-value'''
+        }
+      }
+
+      >> 'when there are only spaces' {
+        tmp E:MY-VAR = "       \t   \n                 "
+
+        >> 'when mandatory' {
+          fails {
+            input:enum MY-VAR $admissible
+          } |
+            should-be 'Missing input: MY-VAR'
+        }
+
+        >> 'when optional' {
+          input:enum &optional MY-VAR $admissible |
+            should-be $nil
+        }
+      }
+
+      >> 'when there are leading and trailing spaces' {
+        tmp E:MY-VAR = '           '$admissible[1]'   '
+
+        >> 'when mandatory' {
+          input:enum MY-VAR $admissible |
+            should-be &strict $admissible[1]
+        }
+
+        >> 'when optional' {
+          input:enum &optional MY-VAR $admissible |
+            should-be &strict $admissible[1]
+        }
+      }
+    }
+
+    >> 'list' {
+      >> 'when the input is missing' {
+        input:list SOME-INEXISTING-VAR |
+          should-be []
+      }
+
+      >> 'when the input is empty' {
+        tmp E:MY-VAR = ''
+
+        input:list MY-VAR |
+          should-be []
+      }
+
+      >> 'when the input contains one item' {
+        tmp E:MY-VAR = hello
+
+        input:list MY-VAR |
+          should-be &strict [hello]
+      }
+
+      >> 'when the input contains multiple items' {
+        tmp E:MY-VAR = 'cip, ciop, yogi, bubu'
+
+        input:list MY-VAR |
+          should-be &strict [
+            cip
+            ciop
+            yogi
+            bubu
+          ]
+      }
+
+      >> 'when there are only spaces' {
+        tmp E:MY-VAR = "       \t   \n                 "
+
+        input:list MY-VAR |
+          should-be []
+      }
+
+      >> 'when there are leading and trailing spaces' {
+        tmp E:MY-VAR = "           alpha,    \t    beta,gamma      , delta     "
+
+        input:list MY-VAR |
+          should-be &strict [
+            alpha
+            beta
+            gamma
+            delta
+          ]
+      }
+
+      >> 'when the input uses a different separator' {
+        tmp E:MY-VAR = 'alpha; beta; gamma'
+
+        input:list &separator=';' MY-VAR |
+          should-be [
+            alpha
+            beta
+            gamma
+          ]
+      }
+
+      >> 'when there are empty items' {
+        tmp E:MY-VAR = ',   alpha,,,,beta,,gamma,   '
+
+        input:list MY-VAR |
+          should-be [
+            alpha
+            beta
+            gamma
+          ]
+      }
+    }
   }
 }

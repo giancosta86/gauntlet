@@ -47,7 +47,7 @@ fn enum { |&optional=$false name admissible-list|
 
   lang:map $string-value { |value|
     if (not (has-value $admissible-list $value)) {
-      fail 'Invalid enum value for the '''$name''' input: '''$value'''!'
+      fail 'Invalid enum value for the '''$name''' input: '''$value''''
     }
 
     put $value
@@ -57,37 +57,12 @@ fn enum { |&optional=$false name admissible-list|
 fn list { |&separator=, name|
   var string-value = (string &optional $name)
 
-  if $string-value {
+  lang:map $string-value { |value|
     put [(
-      str:split $separator $string-value |
+      str:split $separator $value |
         each $str:trim-space~ |
         keep-if $seq:is-non-empty~
     )]
-  } else {
-    put []
-  }
-}
-
-fn -file-system-input { |&optional=$false &can-be-missing=$false type-description name path-checker|
-  var string-value = (string &optional=$optional $name)
-
-  lang:map $string-value { |value|
-      var abs-path = (
-        path:abs $value
-      )
-
-      if (or $can-be-missing ($path-checker $abs-path)) {
-        put $abs-path
-      } else {
-        fail 'Inexistent '$type-description' for input '''$name''' at path: '''$abs-path'''!'
-      }
-    }
-}
-
-fn directory { |&optional=$false &can-be-missing=$false name|
-  -file-system-input &optional=$optional &can-be-missing=$can-be-missing directory $name $os:is-dir~
-}
-
-fn file { |&optional=$false &can-be-missing=$false name|
-  -file-system-input &optional=$optional &can-be-missing=$can-be-missing file $name $os:is-regular~
+  } |
+    coalesce (all) []
 }
