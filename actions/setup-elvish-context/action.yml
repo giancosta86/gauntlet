@@ -63,8 +63,16 @@ runs:
 
           echo 💡 PACKAGE REFERENCE: $package-reference
 
+          var branch = (
+            if (has-env GITHUB_HEAD_REF) {
+              get-env GITHUB_HEAD_REF
+            } else {
+              get-env GITHUB_REF
+            }
+          )
+
           var link-path = (
-            path:join $epm:managed-dir $package-reference
+            path:join $epm:managed-dir $package-reference $branch
           )
 
           echo 💡 LINK PATH: $link-path
