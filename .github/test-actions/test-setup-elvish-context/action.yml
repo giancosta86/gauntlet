@@ -14,3 +14,15 @@ runs:
         var message = '✅ Elvish confirms: the shell is ready! 🚀'
 
         echo $message
+
+    - shell: elvish {0}
+      working-directory: ${{ github.action_path }}
+      run: |
+        echo 🎭 Creating a core directory and setting up the Elvish context again...
+
+        mkdir ../../../core
+
+    - uses: ./actions/setup-elvish-context
+
+    - shell: elvish {0}
+      run: echo ✅ All tests OK!
