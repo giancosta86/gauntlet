@@ -61,9 +61,13 @@ runs:
             ]
           )
 
+          echo 💡 PACKAGE REFERENCE: $package-reference
+
           var link-path = (
             path:join $epm:managed-dir $package-reference
           )
+
+          echo 💡 LINK PATH: $link-path
 
           if (not (os:exists $link-path)) {
             echo 💡 LINK DOES NOT EXIST!
