@@ -23,10 +23,6 @@ runs:
 
         mkdir core
 
-        ls .
-
-        fail KABOOM
-
     - uses: ./actions/setup-elvish-context
 
     - shell: elvish {0}
