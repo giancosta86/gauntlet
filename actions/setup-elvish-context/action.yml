@@ -69,6 +69,11 @@ runs:
 
           echo 💡 LINK PATH: $link-path
 
+          echo 📁
+          path:dir $link-path |
+            ls (all)
+          echo 📁📁📁
+
           if (not (os:exists $link-path)) {
             echo 💡 LINK DOES NOT EXIST!
 
