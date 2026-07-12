@@ -52,6 +52,8 @@ runs:
         echo 2️⃣2️⃣2️⃣
 
         if (os:is-dir $core-directory) {
+          echo 💡 CORE DIRECTORY EXISTS!
+
           var package-reference = (
             str:join / [
               github.com
@@ -64,6 +66,8 @@ runs:
           )
 
           if (not (os:exists $link-path)) {
+            echo 💡 LINK DOES NOT EXIST!
+
             path:dir $link-path |
               os:mkdir-all (all)
 
