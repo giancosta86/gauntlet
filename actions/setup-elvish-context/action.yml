@@ -47,7 +47,9 @@ runs:
 
         var core-directory = (get-env core-directory)
 
+        echo 2️⃣
         ls .
+        echo 2️⃣2️⃣2️⃣
 
         fail KABOOM_2
 

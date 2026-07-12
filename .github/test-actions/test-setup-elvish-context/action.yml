@@ -23,6 +23,10 @@ runs:
 
         mkdir core
 
+        echo 1️⃣
+        ls .
+        echo 1️⃣1️⃣1️⃣
+
     - uses: ./actions/setup-elvish-context
 
     - shell: elvish {0}
