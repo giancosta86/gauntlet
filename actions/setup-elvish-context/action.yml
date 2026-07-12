@@ -51,8 +51,6 @@ runs:
         ls .
         echo 2️⃣2️⃣2️⃣
 
-        fail KABOOM_2
-
         if (os:is-dir $core-directory) {
           var package-reference = (
             str:join / [
