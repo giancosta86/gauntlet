@@ -22,15 +22,8 @@ runs:
 
         echo 🎭 Creating a core directory and setting up the Elvish context again...
 
-        var core-directory = (path:join .. .. .. core)
-
-        mkdir $core-directory
-
-        path:dir $core-directory |
-          ls (all)
-
-        path:abs $core-directory |
-          fail (all)
+        path:join .. .. .. core |
+          mkdir (all)
 
     - uses: ./actions/setup-elvish-context
 

@@ -47,6 +47,14 @@ runs:
 
         var core-directory = (get-env core-directory)
 
+        echo 📁
+        ls .
+        echo 📁📁📁
+
+        os:is-dir $core-directory |
+          fail 'CORE DIRECTORY EXISTS? '(all)
+
+
         if (os:is-dir $core-directory) {
           var package-reference = (
             str:join / [
