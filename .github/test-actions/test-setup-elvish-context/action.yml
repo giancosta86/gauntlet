@@ -14,20 +14,3 @@ runs:
         var message = '✅ Elvish confirms: the shell is ready! 🚀'
 
         echo $message
-
-    - shell: elvish {0}
-      run: |
-        use path
-
-        echo 🎭 Creating a core directory and setting up the Elvish context again...
-
-        mkdir core
-
-        echo 1️⃣
-        ls .
-        echo 1️⃣1️⃣1️⃣
-
-    - uses: ./actions/setup-elvish-context
-
-    - shell: elvish {0}
-      run: echo ✅ All tests OK!

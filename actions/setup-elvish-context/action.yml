@@ -47,13 +47,7 @@ runs:
 
         var core-directory = (get-env core-directory)
 
-        echo 2️⃣
-        ls .
-        echo 2️⃣2️⃣2️⃣
-
         if (os:is-dir $core-directory) {
-          echo 💡 CORE DIRECTORY EXISTS!
-
           var package-reference = (
             str:join / [
               github.com
@@ -61,36 +55,17 @@ runs:
             ]
           )
 
-          echo 💡 PACKAGE REFERENCE: $package-reference
-
-          var branch = (
-            if (has-env GITHUB_HEAD_REF) {
-              get-env GITHUB_HEAD_REF
-            } else {
-              get-env GITHUB_REF
-            }
-          )
-
           var link-path = (
-            path:join $epm:managed-dir $package-reference $branch
+            path:join $epm:managed-dir $package-reference
           )
-
-          echo 💡 LINK PATH: $link-path
-
-          echo 📁
-          path:dir $link-path |
-            ls (all)
-          echo 📁📁📁
 
           if (not (os:exists $link-path)) {
-            echo 💡 LINK DOES NOT EXIST!
-
             path:dir $link-path |
               os:mkdir-all (all)
 
             os:symlink $core-directory $link-path
 
-            echo 📦 The package reference '''$package-reference''' now points to core directory: '''$core-directory'''
+            echo 📦 The package reference ''''$package-reference'' now points to core directory: ''''$core-directory''''
           }
         }
       env:
