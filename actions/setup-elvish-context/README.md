@@ -6,7 +6,7 @@ Installs the **Elvish** shell and a set of core libraries.
 
 ```yaml
 steps:
-  - uses: giancosta86/aurora-github/actions/setup-elvish-context@v11
+  - uses: giancosta86/gauntlet/actions/setup-elvish-context@v1
 ```
 
 ## 💡 How it works
