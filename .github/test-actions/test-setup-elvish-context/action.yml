@@ -26,6 +26,9 @@ runs:
 
         mkdir $core-directory
 
+        path:dir $core-directory |
+          ls (all)
+
         path:abs $core-directory |
           fail (all)
 
