@@ -18,7 +18,19 @@ jobs:
 
       - shell: bash
         run: |
-          elvish verify.elv
+          use epm
+
+          epm:install github.com/giancosta86/epm-plus
+
+          use github.com/giancosta86/epm-plus/epm-plus
+
+          epm-plus:patch-epm
+
+          epm:install
+
+          use github.com/giancosta86/velvet/v4/velvet
+
+          velvet:velvet &flawless
 
   verify-github-action:
     runs-on: ubuntu-24.04
