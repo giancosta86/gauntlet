@@ -8,27 +8,32 @@ on:
   workflow_dispatch:
 
 jobs:
-  verify:
+  verify-library:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: elves/setup-elvish@v1
-        with:
-          elvish-version: 0.21.0
+      - shell: bash
+        run: curl -so - https://dl.elv.sh/linux-amd64/elvish-v0.21.0.tar.gz | tar -xzC /usr/local/bin
 
-      - shell: elvish {0}
+      - shell: bash
         run: |
-          use epm
+          elvish verify.elv
 
-          epm:install github.com/giancosta86/epm-plus
+  verify-github-action:
+    runs-on: ubuntu-24.04
+    needs:
+      - verify-library
+    steps:
+      - uses: actions/checkout@v7
 
-          use github.com/giancosta86/epm-plus/epm-plus
+      - uses: ./.github/test-actions/test-setup-elvish-context
 
-          epm-plus:patch-epm
+  verify:
+    runs-on: ubuntu-24.04
+    needs:
+      - verify-github-action
 
-          epm:install
-
-          use github.com/giancosta86/velvet/v4/velvet
-
-          velvet:velvet &flawless
+    steps:
+      - shell: bash
+        run: echo '✅ All tests OK!'

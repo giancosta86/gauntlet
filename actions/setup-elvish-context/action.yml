@@ -43,12 +43,20 @@ runs:
         use epm
         use os
         use path
+        use str
 
         var core-directory = (get-env core-directory)
 
         if (os:is-directory $core-directory) {
+          var package-reference = (
+            str:join / [
+              github.com
+              (get-env GITHUB_REPOSITORY)
+            ]
+          )
+
           var link-path = (
-            path:join $epm:managed-dir github.com (get-env GITHUB_REPOSITORY)
+            path:join $epm:managed-dir $package-reference
           )
 
           if (not (os:exists $link-path)) {
@@ -56,6 +64,8 @@ runs:
               os:mkdir-all (all)
 
             os:symlink $core-directory $link-path
+
+            echo 📦 The package reference '''$package-reference''' now points to core directory: '''$core-directory'''
           }
         }
       env:
