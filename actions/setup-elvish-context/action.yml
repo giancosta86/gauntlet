@@ -47,7 +47,7 @@ runs:
 
         var core-directory = (get-env core-directory)
 
-        if (os:is-directory $core-directory) {
+        if (os:is-dir $core-directory) {
           var package-reference = (
             str:join / [
               github.com
