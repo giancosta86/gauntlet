@@ -52,7 +52,7 @@ runs:
         echo 📁📁📁
 
         os:is-dir $core-directory |
-          fail 'CORE DIRECTORY EXISTS? '(all)
+          fail 'CORE DIRECTORY EXISTS? '(to-string (all))
 
 
         if (os:is-dir $core-directory) {

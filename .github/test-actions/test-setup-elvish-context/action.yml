@@ -16,14 +16,16 @@ runs:
         echo $message
 
     - shell: elvish {0}
-      working-directory: ${{ github.action_path }}
       run: |
         use path
 
         echo 🎭 Creating a core directory and setting up the Elvish context again...
 
-        path:join .. .. .. core |
-          mkdir (all)
+        mkdir core
+
+        ls .
+
+        fail KABOOM
 
     - uses: ./actions/setup-elvish-context
 
