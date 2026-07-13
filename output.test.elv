@@ -8,7 +8,8 @@ fake-context:within github {
       fs:with-temp-file { |temp-file|
         set-env GITHUB_OUTPUT $temp-file
 
-        output:set alpha $true
+        put $true |
+          output:set alpha
 
         to-lines < $temp-file |
           should-be alpha=true

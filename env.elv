@@ -5,7 +5,9 @@ use ./context
 var env: = (src | context:use-dual-mod)
 var values: = (context:use-mod values)
 
-fn set { |key value|
+fn set { |key @arguments|
+  var value = (lang:get-single-input $arguments)
+
   var context-value = (values:elvish-to-context $value)
 
   set-env $key $context-value

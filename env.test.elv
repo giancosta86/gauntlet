@@ -8,7 +8,8 @@ fake-context:within github {
       fs:with-temp-file { |temp-file|
         set-env GITHUB_ENV $temp-file
 
-        env:set alpha $true
+        put $true |
+          env:set alpha
 
         >> 'should update the environment variable' {
           get-env alpha |
