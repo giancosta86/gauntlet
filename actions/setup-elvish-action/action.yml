@@ -45,10 +45,6 @@ runs:
 
         var core-directory = (get-env core-directory)
 
-        echo 📁
-        ls .
-        echo 📁📁📁
-
         if (os:is-dir $core-directory) {
           echo 💡 CORE FOUND!
 
@@ -59,9 +55,13 @@ runs:
             ]
           )
 
+          echo 💡PACKAGE REFERENCE: $package-reference
+
           var link-path = (
             path:join $epm:managed-dir $package-reference
           )
+
+          echo 💡LINK PATH: $link-path
 
           if (not (os:exists $link-path)) {
             path:dir $link-path |
