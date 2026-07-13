@@ -45,7 +45,13 @@ runs:
 
         var core-directory = (get-env core-directory)
 
+        echo 📁
+        ls .
+        echo 📁📁📁
+
         if (os:is-dir $core-directory) {
+          echo 💡 CORE FOUND!
+
           var package-reference = (
             str:join / [
               github.com
