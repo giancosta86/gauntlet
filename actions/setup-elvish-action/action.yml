@@ -73,7 +73,11 @@ runs:
             path:dir $link-path |
               os:mkdir-all (all)
 
-            os:symlink $core-directory $link-path
+            var link-source = (path:abs $core-directory)
+
+            echo 💡 LINK SOURCE: $link-source
+
+            os:symlink $link-source $link-path
 
             echo 📦 The package reference ''''$package-reference'' now points to core directory: ''''$core-directory''''
           }
