@@ -46,8 +46,6 @@ runs:
         var core-directory = (get-env core-directory)
 
         if (os:is-dir $core-directory) {
-          echo 💡 CORE FOUND!
-
           var package-reference = (
             str:join / [
               github.com
@@ -55,27 +53,15 @@ runs:
             ]
           )
 
-          echo 💡PACKAGE REFERENCE: $package-reference
-
           var link-path = (
             path:join $epm:managed-dir $package-reference
           )
-
-          echo 💡LINK PATH: $link-path
-
-          {
-            echo 🔎
-            ls -l (path:dir $link-path)
-            echo 🔎🔎🔎
-          }
 
           if (not (os:exists $link-path)) {
             path:dir $link-path |
               os:mkdir-all (all)
 
             var link-source = (path:abs $core-directory)
-
-            echo 💡 LINK SOURCE: $link-source
 
             os:symlink $link-source $link-path
 
