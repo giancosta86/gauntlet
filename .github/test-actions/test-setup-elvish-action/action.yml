@@ -1,0 +1,22 @@
+name: Test setup-elvish-action
+description: Tests for setup-elvish-action.
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: echo "🎭 Setting up an Elvish action with default inputs..."
+
+    - uses: ./actions/setup-elvish-action
+
+    - shell: elvish {0}
+      run: |
+        echo 🔎 Checking for Ethereal...
+        use github.com/giancosta86/ethereal/v1/lang
+        echo ✅ Ethereal is accessible!
+
+        echo 🔎 Checking for Gauntlet...
+        use github.com/giancosta86/gauntlet/v1/context
+        echo ✅ Gauntlet is accessible!
+
+        echo ✅ All libraries ready!
