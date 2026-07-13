@@ -58,7 +58,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - shell: elvish {0}
+      - shell: bash
         run: echo ✅ All actions tested!
 
   verify:
