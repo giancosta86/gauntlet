@@ -8,7 +8,7 @@ use ./env
 
         var value = 'Hello, world!'
 
-        env:write alpha $value
+        env:set alpha $value
 
         to-lines < $temp-file |
           should-be 'alpha='$value
@@ -19,8 +19,8 @@ use ./env
       fs:with-temp-file { |temp-file|
         tmp E:GITHUB_ENV = $temp-file
 
-        env:write alpha Hello
-        env:write beta World
+        env:set alpha Hello
+        env:set beta World
 
         to-lines < $temp-file |
           should-emit [

@@ -2,25 +2,25 @@ use ./output
 
 >> 'GitHub' {
   >> 'output' {
-    >> 'writing once' {
+    >> 'setting a value' {
       fs:with-temp-file { |temp-file|
         tmp E:GITHUB_OUTPUT = $temp-file
 
         var value = 'Hello, world!'
 
-        output:write alpha $value
+        output:set alpha $value
 
         to-lines < $temp-file |
           should-be 'alpha='$value
       }
     }
 
-    >> 'writing multiple values' {
+    >> 'setting multiple values' {
       fs:with-temp-file { |temp-file|
         tmp E:GITHUB_OUTPUT = $temp-file
 
-        output:write alpha Hello
-        output:write beta World
+        output:set alpha Hello
+        output:set beta World
 
         to-lines < $temp-file |
           should-emit [

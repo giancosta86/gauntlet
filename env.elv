@@ -5,15 +5,15 @@ use ./context
 var env: = (src | context:use-dual-mod)
 var values: = (context:use-mod values)
 
-fn write { |key value|
+fn set { |key value|
   var context-value = (values:elvish-to-context $value)
 
   set-env $key $context-value
 
-  env:write $key $context-value
+  env:set $key $context-value
 }
 
 fn map { |@arguments|
   lang:get-single-input $arguments |
-    map:iterate $write~
+    map:iterate $set~
 }
