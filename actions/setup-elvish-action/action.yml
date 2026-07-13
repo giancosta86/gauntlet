@@ -65,7 +65,7 @@ runs:
 
           {
             echo 🔎
-            ls $link-path
+            ls -l (path:dir $link-path)
             echo 🔎🔎🔎
           }
 
