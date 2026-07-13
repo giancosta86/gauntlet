@@ -32,7 +32,7 @@ jobs:
 
           velvet:velvet &flawless
 
-  verify-github-action:
+  test-setup-elvish-context:
     runs-on: ubuntu-24.04
     needs:
       - verify-library
@@ -41,11 +41,31 @@ jobs:
 
       - uses: ./.github/test-actions/test-setup-elvish-context
 
+  test-setup-elvish-action:
+    runs-on: ubuntu-24.04
+    needs:
+      - test-setup-elvish-context
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/test-actions/test-setup-elvish-action
+
+  verify-github-actions:
+    runs-on: ubuntu-24.04
+    needs:
+      - test-setup-elvish-context
+      - test-setup-elvish-action
+    steps:
+      - uses: actions/checkout@v7
+
+      - shell: elvish {0}
+        run: echo ✅ All actions tested!
+
   verify:
     runs-on: ubuntu-24.04
     needs:
-      - verify-github-action
-
+      - verify-library
+      - verify-github-actions
     steps:
       - shell: bash
         run: echo '✅ All tests OK!'

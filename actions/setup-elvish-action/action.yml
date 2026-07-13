@@ -1,0 +1,70 @@
+name: Setup an Elvish action
+description: Sets up the environment for a GitHub action written in Elvish.
+
+inputs:
+  elvish-version:
+    description: Elvish version to install.
+    default: 0.21.0
+
+  ethereal-version:
+    description: Ethereal version to install - or empty string to skip.
+    default: v1
+
+  gauntlet-version:
+    description: Gauntlet version to install - or empty string to skip.
+    default: v1
+
+  core-directory:
+    description: Directory containing the core for CI/CD actions.
+    default: core
+
+runs:
+  using: composite
+  steps:
+    - uses: giancosta86/gauntlet/actions/setup-elvish-context@v1
+      with:
+        version: ${{ inputs.elvish-version }}
+
+    - if: inputs.ethereal-version != ''
+      uses: giancosta86/epm-plus/actions/install-elvish-packages@main
+      with:
+        packages: github.com/giancosta86/ethereal@${{ inputs.ethereal-version }}
+
+    - if: inputs.gauntlet-version != ''
+      uses: giancosta86/epm-plus/actions/install-elvish-packages@main
+      with:
+        packages: github.com/giancosta86/gauntlet@${{ inputs.gauntlet-version }}
+
+    - if: inputs.core-directory != ''
+      shell: elvish {0}
+      run: |
+        use epm
+        use os
+        use path
+        use str
+
+        var core-directory = (get-env core-directory)
+
+        if (os:is-dir $core-directory) {
+          var package-reference = (
+            str:join / [
+              github.com
+              (get-env GITHUB_REPOSITORY)
+            ]
+          )
+
+          var link-path = (
+            path:join $epm:managed-dir $package-reference
+          )
+
+          if (not (os:exists $link-path)) {
+            path:dir $link-path |
+              os:mkdir-all (all)
+
+            os:symlink $core-directory $link-path
+
+            echo 📦 The package reference ''''$package-reference'' now points to core directory: ''''$core-directory''''
+          }
+        }
+      env:
+        core-directory: ${{ inputs.core-directory }}
