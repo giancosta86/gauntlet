@@ -63,6 +63,14 @@ runs:
 
           echo 💡LINK PATH: $link-path
 
+          {
+            tmp pwd = (path:dir $link-path)
+
+            echo 🔎
+            ls .
+            echo 🔎🔎🔎
+          }
+
           if (not (os:exists $link-path)) {
             path:dir $link-path |
               os:mkdir-all (all)
