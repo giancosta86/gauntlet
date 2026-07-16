@@ -37,8 +37,6 @@ runs:
 
     - if: inputs.core-directory != ''
       shell: bash
-      working-directory: ${{ github.action_path }}
-      run: elvish core-setup.elv
-
+      run: elvish ${{ github.action_path }}/core-setup.elv
       env:
         core-directory: ${{ inputs.core-directory }}
