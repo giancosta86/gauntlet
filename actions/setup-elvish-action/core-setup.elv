@@ -25,6 +25,6 @@ if (os:is-dir $core-directory) {
 
     os:symlink $link-source $link-path
 
-    echo 📦 The package reference ''''$package-reference'''' now points to core directory: ''''$link-source''''
+    echo 🧬 The package reference ''''$package-reference'''' now points to core directory: ''''$link-source''''
   }
 }
