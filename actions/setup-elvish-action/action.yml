@@ -14,8 +14,8 @@ inputs:
     description: Gauntlet version to install - or empty string to skip.
     default: v1
 
-  core-repository:
-    description: Repository containing `core-directory`.
+  core-package:
+    description: Elvish package referencing the action core.
 
   core-directory:
     description: Directory containing the core for CI/CD actions.
@@ -41,5 +41,5 @@ runs:
       shell: bash
       run: elvish ${{ github.action_path }}/core-setup.elv
       env:
-        core-repository: ${{ inputs.core-repository }}
+        core-package: ${{ inputs.core-package }}
         core-directory: ${{ inputs.core-directory }}
