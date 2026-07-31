@@ -28,7 +28,9 @@ if (eq $core-directory '') {
     path:join $epm:managed-dir $package-reference
   )
 
-  if (not (os:exists $link-path)) {
+  if (os:exists $link-path) {
+    echo 🔗 Core link "'"$link-path"'" already existing...
+  } else {
     path:dir $link-path |
       os:mkdir-all (all)
 
