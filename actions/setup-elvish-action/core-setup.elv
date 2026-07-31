@@ -3,29 +3,18 @@ use os
 use path
 use str
 
-var core-repository = (get-env core-repository)
+var core-package = (get-env core-package)
 var core-directory = (get-env core-directory)
 
-if (eq $core-directory '') {
-  echo 💭 core directory not declared...
+if (eq $core-package '') {
+  echo 💭 core package not declared...
 } else {
   if (not (os:is-dir $core-directory)) {
     fail 'Missing core directory: '$core-directory
   }
 
-  if (eq $core-repository '') {
-    fail 'core-repository input missing!'
-  }
-
-  var package-reference = (
-    str:join / [
-      github.com
-      $core-repository
-    ]
-  )
-
   var link-path = (
-    path:join $epm:managed-dir $package-reference
+    path:join $epm:managed-dir $core-package
   )
 
   if (os:exists $link-path) {
@@ -38,6 +27,6 @@ if (eq $core-directory '') {
 
     os:symlink $link-source $link-path
 
-    echo 🧬 The package reference ''''$package-reference'''' now points to core directory: ''''$link-source''''
+    echo 🧬 Package reference ''''$package-reference'''' now points to core directory: ''''$link-source''''
   }
 }
