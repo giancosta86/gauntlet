@@ -3,6 +3,7 @@ use os
 use path
 use str
 
+var core-repository = (get-env core-repository)
 var core-directory = (get-env core-directory)
 
 if (eq $core-directory '') {
@@ -12,10 +13,14 @@ if (eq $core-directory '') {
     fail 'Missing core directory: '$core-directory
   }
 
+  if (eq $core-repository '') {
+    fail 'core-repository input missing!'
+  }
+
   var package-reference = (
     str:join / [
       github.com
-      (get-env GITHUB_REPOSITORY)
+      $core-repository
     ]
   )
 

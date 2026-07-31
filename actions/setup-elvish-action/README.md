@@ -18,11 +18,12 @@ steps:
 1. If the `gauntlet-version` input is set, such version of [Gauntlet](../../README.md) will be installed via the [install-elvish-packages](https://github.com/giancosta86/epm-plus/blob/main/actions/install-elvish-packages/README.md) action.
 
 1. If the `core-directory` input is set:
-   - if it points to an existing directory, create a _symlink_ to such a directory in a way that, in **Elvish** `use` declarations, `github.com/<full repository name>/<module path>` actually points to a module residing within such **core** directory tree.
+   - if it points to an existing directory, create a _symlink_ to such a directory in a way that, in **Elvish** `use` declarations, `github.com/<core-repository>/<module path>` actually points to a module residing within such **core** directory tree.
 
      For example, in the **giancosta86/aurora-github** repository, a composite action invoking this action with:
 
      ```yaml
+     core-repository: ${{ github.action_repository }}
      core-directory: ${{ github.action_path }}/......../core
      ```
 
@@ -32,7 +33,7 @@ steps:
      use github.com/giancosta86/aurora-github/my-module
      ```
 
-   - if the directory is missing, the action fails
+   - if the directory is missing or `core-repository` is not set, the action fails
 
 ## 📥 Inputs
 
@@ -41,6 +42,7 @@ steps:
 |  `elvish-version`  | **string** |               Elvish version to install               |  **0.21.0**   |
 | `ethereal-version` | **string** | Ethereal version to install - or empty string to skip |    **v1**     |
 | `gauntlet-version` | **string** | Gauntlet version to install - or empty string to skip |    **v1**     |
+| `core-repository`  | **string** |        Repository containing `core-directory`         |               |
 |  `core-directory`  | **string** |    Directory containing the core for CI/CD actions    |               |
 
 ## 🌐 Further references
