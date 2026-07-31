@@ -27,6 +27,6 @@ if (eq $core-package '') {
 
     os:symlink $link-source $link-path
 
-    echo 🧬 Package reference ''''$package-reference'''' now points to core directory: ''''$link-source''''
+    echo 🧬 Package ''''$core-package'''' now points to core directory: ''''$link-source''''
   }
 }
