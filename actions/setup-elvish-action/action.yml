@@ -16,7 +16,6 @@ inputs:
 
   core-directory:
     description: Directory containing the core for CI/CD actions.
-    default: core
 
 runs:
   using: composite

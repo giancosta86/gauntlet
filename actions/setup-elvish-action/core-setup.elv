@@ -5,7 +5,13 @@ use str
 
 var core-directory = (get-env core-directory)
 
-if (os:is-dir $core-directory) {
+if (eq $core-directory '') {
+  echo 💭 core directory not declared...
+} else {
+  if (not (os:is-dir $core-directory)) {
+    fail 'Missing core directory: '$core-directory
+  }
+
   var package-reference = (
     str:join / [
       github.com
