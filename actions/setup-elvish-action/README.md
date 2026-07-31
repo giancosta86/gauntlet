@@ -23,7 +23,7 @@ steps:
      For example, in the **giancosta86/aurora-github** repository, a composite action invoking this action with:
 
      ```yaml
-     core-directory: ${{ github.action_repository }}/core
+     core-directory: ${{ github.action_path }}/......../core
      ```
 
      can access a **core/my-module.elv** module in its repository directory via:
