@@ -1,9 +1,27 @@
+use path
 use ./tests/fake-context
 
 fake-context:within github {
+  use ./repository
+
+  tmp E:GITHUB_WORKSPACE = (path:join / alpha beta)
+
   >> 'Repository' {
-    >> 'should be importable' {
-      run-dual (src)
+    >> 'getting path' {
+      >> 'when passing no arguments' {
+        repository:get-path |
+          should-be (path:join / alpha beta)
+      }
+
+      >> 'when passing a single argument' {
+        repository:get-path gamma |
+          should-be (path:join / alpha beta gamma)
+      }
+
+      >> 'when passing two arguments' {
+        repository:get-path gamma delta |
+          should-be (path:join / alpha beta gamma delta)
+      }
     }
   }
 }

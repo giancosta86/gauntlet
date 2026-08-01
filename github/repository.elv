@@ -9,3 +9,7 @@ fn get-name {
     str:split / (all) |
     drop 1
 }
+
+fn get-root-directory {
+  get-env GITHUB_WORKSPACE
+}
