@@ -16,7 +16,7 @@ jobs:
       - shell: bash
         run: curl -so - https://dl.elv.sh/linux-amd64/elvish-v0.21.0.tar.gz | tar -xzC /usr/local/bin
 
-      - uses: github.com/giancosta86/epm-plus/actions/install-elvish-packages@v1
+      - uses: giancosta86/epm-plus/actions/install-elvish-packages@v1
         with:
           packages: github.com/giancosta86/velvet@v4
 
