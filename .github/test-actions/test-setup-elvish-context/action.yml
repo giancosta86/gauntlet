@@ -5,7 +5,7 @@ runs:
   using: composite
   steps:
     - shell: bash
-      run: echo "🎭 Setting up an Elvish context with default inputs..."
+      run: echo "🎭 Setting up an Elvish context..."
 
     - uses: ./actions/setup-elvish-context
 
