@@ -1,16 +1,22 @@
 use github.com/giancosta86/ethereal/v1/lang
 use ./context
 
-var action-references: = (src | context:use-dual-mod)
-var git-refs: = (src | context:use-mod git-refs)
-var repository: = (src | context:use-mod repository)
+var dual: = (src | context:use-dual-mod)
 
+var git-refs: = (context:use-mod git-refs)
+
+var repository: = (context:use-mod repository)
+
+#
+# After scanning all the .yml files below the current directory,
+# emits all the references pointing to other actions that belong to this repository but have a different version.
+#
 fn get-to-other-branches { |&colors=$false|
   var full-repository-name = (repository:get-full-name)
 
   var current-branch = (git-refs:get-current)
 
-  var regex = (action-references:get-perl-regex-to-other-branches $full-repository-name $current-branch)
+  var regex = (dual:get-perl-regex-to-other-branches $full-repository-name $current-branch)
 
   try {
     var color-arg = (lang:ternary $colors always never)
@@ -21,7 +27,9 @@ fn get-to-other-branches { |&colors=$false|
 
     all $grep-lines
   } catch e {
-    if (!= $e[reason][exit-status] 1) {
+    var grep-error-occurred = (== $e[reason][exit-status] 2)
+
+    if $grep-error-occurred {
       fail $e
     }
   }

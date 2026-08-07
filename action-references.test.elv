@@ -5,6 +5,7 @@ fake-context:within github {
 
   >> 'Action references' {
     tmp E:GITHUB_REPOSITORY = owner/my-repo
+
     tmp E:GITHUB_HEAD_REF = v-fake
 
     >> 'pointing to other branches' {
