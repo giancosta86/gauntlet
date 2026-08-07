@@ -1,7 +1,6 @@
 use epm
 use os
 use path
-use str
 
 var core-package = (get-env core-package)
 var core-directory = (get-env core-directory)
