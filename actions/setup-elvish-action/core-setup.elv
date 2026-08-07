@@ -18,7 +18,7 @@ if (eq $core-package '') {
   )
 
   if (os:exists $link-path) {
-    echo 🔗 Core link "'"$link-path"'" already existing...
+    echo 🔗 Core link "'"$link-path"'" already exists...
   } else {
     path:dir $link-path |
       os:mkdir-all (all)

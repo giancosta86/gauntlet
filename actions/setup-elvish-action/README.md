@@ -39,7 +39,7 @@ steps:
 |  `elvish-version`  | **string** |               Elvish version to install               |  **0.21.0**   |
 | `ethereal-version` | **string** | Ethereal version to install - or empty string to skip |    **v1**     |
 | `gauntlet-version` | **string** | Gauntlet version to install - or empty string to skip |    **v1**     |
-|   `core-package`   | **string** |      Elvish package referencing the action core       |               |
+|   `core-package`   | **string** | Elvish package referencing the core for CI/CD actions |               |
 |  `core-directory`  | **string** |    Directory containing the core for CI/CD actions    |               |
 
 ## 🌐 Further references
