@@ -46,12 +46,12 @@ var resources = (src | resources:for-script)
   >> 'loading a dual module' {
     fake-context:within github {
       var fake-src = [
-        &name=($resources[get-path] action-references.elv)
+        &name=($resources[get-path] repository.elv)
       ]
 
       var dual-module = (context:use-dual-mod $fake-src)
 
-      has-key $dual-module get-perl-regex-to-other-branches~ |
+      has-key $dual-module get-name~ |
         should-be $true
     }
   }

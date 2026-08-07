@@ -8,24 +8,26 @@ fn -set-github-context {
   set-env GITHUB_ACTIONS true
 }
 
+fn -set-context { |context|
+  -unset-all-contexts
+
+  if (not $context) {
+    # Just do nothing
+  } elif (eq $context github) {
+    -set-github-context
+  } else {
+    fail 'Unsupported context for tests: '$context
+  }
+}
+
 fn within { |context block|
   var previous-context = (context:detect)
 
-  -unset-all-contexts
-
   try {
-    if (not $context) {
-      # Just do nothing
-    } elif (eq $context github) {
-      -set-github-context
-    } else {
-      fail 'Unsupported context in tests: '$context
-    }
+    -set-context $context
 
     $block
   } finally {
-    if (eq $previous-context github) {
-      -set-github-context
-    }
+    -set-context $previous-context
   }
 }
