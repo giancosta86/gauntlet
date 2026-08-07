@@ -3,10 +3,16 @@ use github.com/giancosta86/ethereal/v1/lang
 use github.com/giancosta86/ethereal/v1/seq
 use ./context
 
-var input: = (src | context:use-dual-mod)
+var dual: = (src | context:use-dual-mod)
 
+#
+# Reads and trims the string having the given name from the action's input system.
+#
+# If the string (after trimming) is empty or missing, the function fails - unless &optional is enabled,
+# making the function emit just $nil.
+#
 fn string { |&optional=$false name|
-  input:get-string $name |
+  dual:get-string $name |
     lang:map { |value|
       str:trim-space $value |
         seq:empty-to-default
@@ -20,12 +26,25 @@ fn string { |&optional=$false name|
     }
 }
 
+#
+# Reads the number having the given name from the action's input system.
+#
+# The input string is trimmed before the conversion; if the trimmed string is empty or missing,
+# the function fails - unless &optional is enabled, making the function emit just $nil.
+#
 fn number { |&optional=$false name|
   var string-value = (string &optional=$optional $name)
 
   lang:map $string-value $num~
 }
 
+#
+# Reads the boolean having the given name from the action's input system; if present the value must be
+# either `true` or `false`.
+#
+# The input string is trimmed before the conversion; if the trimmed string is empty or missing,
+# the function fails - unless &optional is enabled, making the function emit just $nil.
+#
 fn bool { |&optional=$false name|
   var string-value = (string &optional=$optional $name)
 
@@ -40,10 +59,17 @@ fn bool { |&optional=$false name|
   }
 }
 
+#
+# Reads and trims the string having the given name from the action's input system,
+# ensuring it belongs to a restricted pool.
+#
+# If the string (after trimming) is empty or missing, the function fails - unless &optional is enabled,
+# making the function emit just $nil.
+#
 fn enum { |&optional=$false name admissible-list|
-  var string-value = (string &optional=$optional $name)
+  var input-value = (string &optional=$optional $name)
 
-  lang:map $string-value { |value|
+  lang:map $input-value { |value|
     if (not (has-value $admissible-list $value)) {
       fail 'Invalid enum value for the '''$name''' input: '''$value''''
     }
@@ -52,6 +78,12 @@ fn enum { |&optional=$false name admissible-list|
   }
 }
 
+#
+# Reads the string having the given name from the action's input system - and always emits a list.
+#
+# Splits the items according to the given separator, then trims each of them, discarding empty strings;
+# if the input string is missing or empty, emits an empty list.
+#
 fn list { |&separator=, name|
   var string-value = (string &optional $name)
 

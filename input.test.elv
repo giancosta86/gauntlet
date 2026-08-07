@@ -3,157 +3,91 @@ use ./tests/fake-context
 fake-context:within github {
   use ./input
 
-  >> 'Input' {
-    >> 'string' {
-      >> 'when the input is missing' {
-        >> 'when mandatory' {
-          fails {
-            input:string SOME-INEXISTING-VAR
-          } |
-            should-be 'Missing input: SOME-INEXISTING-VAR'
-        }
+  fn run-single-value-tests { |processor valid-input valid-result|
+    >> 'when the input is missing' {
+      var missing-var-name = SOME-MISSING-VAR
 
-        >> 'when optional' {
-          input:string &optional SOME-INEXISTING-VAR |
-            should-be $nil
-        }
+      >> 'when mandatory' {
+        fails {
+          $processor $missing-var-name
+        } |
+          should-be 'Missing input: '$missing-var-name
       }
 
-      >> 'when the input is empty' {
-        tmp E:MY-VAR = ''
-
-        >> 'when mandatory' {
-          fails {
-            input:string MY-VAR
-          } |
-            should-be 'Missing input: MY-VAR'
-        }
-
-        >> 'when optional' {
-          input:string &optional MY-VAR |
-            should-be $nil
-        }
-      }
-
-      >> 'when the input is non-empty' {
-        tmp E:MY-VAR = 'dodo'
-
-        >> 'when mandatory' {
-          input:string MY-VAR |
-            should-be (get-env MY-VAR)
-        }
-
-        >> 'when optional' {
-          input:string &optional MY-VAR |
-            should-be (get-env MY-VAR)
-        }
-      }
-
-      >> 'when there are only spaces' {
-        tmp E:MY-VAR = "       \t   \n                 "
-
-        >> 'when mandatory' {
-          fails {
-            input:string MY-VAR
-          } |
-            should-be 'Missing input: MY-VAR'
-        }
-
-        >> 'when optional' {
-          input:string &optional MY-VAR |
-            should-be $nil
-        }
-      }
-
-      >> 'when there are leading and trailing spaces' {
-        tmp E:MY-VAR = '           dodo   '
-
-        >> 'when mandatory' {
-          input:string MY-VAR |
-            should-be dodo
-        }
-
-        >> 'when optional' {
-          input:string &optional MY-VAR |
-            should-be dodo
-        }
+      >> 'when optional' {
+        $processor &optional $missing-var-name |
+          should-be $nil
       }
     }
 
+    >> 'when the input is empty' {
+      tmp E:MY-VAR = ''
+
+      >> 'when mandatory' {
+        fails {
+          $processor MY-VAR
+        } |
+          should-be 'Missing input: MY-VAR'
+      }
+
+      >> 'when optional' {
+        $processor &optional MY-VAR |
+          should-be &strict $nil
+      }
+    }
+
+    >> 'when the input has just spaces' {
+      tmp E:MY-VAR = "       \t   \n                 "
+
+      >> 'when mandatory' {
+        fails {
+          $processor MY-VAR
+        } |
+          should-be 'Missing input: MY-VAR'
+      }
+
+      >> 'when optional' {
+        $processor &optional MY-VAR |
+          should-be &strict $nil
+      }
+    }
+
+    >> 'when the input is valid' {
+      tmp E:MY-VAR = $valid-input
+
+      >> 'when mandatory' {
+        $processor MY-VAR |
+          should-be &strict $valid-result
+      }
+
+      >> 'when optional' {
+        $processor &optional MY-VAR |
+          should-be &strict $valid-result
+      }
+    }
+
+    >> 'when the valid input has leading and trailing spaces' {
+      tmp E:MY-VAR = "    \t  \n        "$valid-input"    \n \n \t      "
+
+      >> 'when mandatory' {
+        $processor MY-VAR |
+          should-be &strict $valid-result
+      }
+
+      >> 'when optional' {
+        $processor &optional MY-VAR |
+          should-be &strict $valid-result
+      }
+    }
+  }
+
+  >> 'Input' {
+    >> 'string' {
+      run-single-value-tests $input:string~ dodo dodo
+    }
+
     >> 'number' {
-      >> 'when the input is missing' {
-        >> 'when mandatory' {
-          fails {
-            input:number SOME-INEXISTING-VAR
-          } |
-            should-be 'Missing input: SOME-INEXISTING-VAR'
-        }
-
-        >> 'when optional' {
-          input:number &optional SOME-INEXISTING-VAR |
-            should-be $nil
-        }
-      }
-
-      >> 'when the input is empty' {
-        tmp E:MY-VAR = ''
-
-        >> 'when mandatory' {
-          fails {
-            input:number MY-VAR
-          } |
-            should-be 'Missing input: MY-VAR'
-        }
-
-        >> 'when optional' {
-          input:number &optional MY-VAR |
-            should-be $nil
-        }
-      }
-
-      >> 'when the input is non-empty' {
-        tmp E:MY-VAR = '90'
-
-        >> 'when mandatory' {
-          input:number MY-VAR |
-            should-be &strict (num 90)
-        }
-
-        >> 'when optional' {
-          input:number &optional MY-VAR |
-            should-be &strict (num 90)
-        }
-      }
-
-      >> 'when there are only spaces' {
-        tmp E:MY-VAR = "       \t   \n                 "
-
-        >> 'when mandatory' {
-          fails {
-            input:number MY-VAR
-          } |
-            should-be 'Missing input: MY-VAR'
-        }
-
-        >> 'when optional' {
-          input:number &optional MY-VAR |
-            should-be $nil
-        }
-      }
-
-      >> 'when there are leading and trailing spaces' {
-        tmp E:MY-VAR = "        \t   90   \n   "
-
-        >> 'when mandatory' {
-          input:number MY-VAR |
-            should-be &strict (num 90)
-        }
-
-        >> 'when optional' {
-          input:number &optional MY-VAR |
-            should-be &strict (num 90)
-        }
-      }
+      run-single-value-tests $input:number~ 90 (num 90)
 
       >> 'when the input is not a number' {
         tmp E:MY-VAR = dodo
@@ -179,49 +113,7 @@ fake-context:within github {
     }
 
     >> 'boolean' {
-      >> 'when the input is missing' {
-        >> 'when mandatory' {
-          fails {
-            input:bool SOME-INEXISTING-VAR
-          } |
-            should-be 'Missing input: SOME-INEXISTING-VAR'
-        }
-
-        >> 'when optional' {
-          input:bool &optional SOME-INEXISTING-VAR |
-            should-be $nil
-        }
-      }
-
-      >> 'when the input is empty' {
-        tmp E:MY-VAR = ''
-
-        >> 'when mandatory' {
-          fails {
-            input:bool MY-VAR
-          } |
-            should-be 'Missing input: MY-VAR'
-        }
-
-        >> 'when optional' {
-          input:bool &optional MY-VAR |
-            should-be $nil
-        }
-      }
-
-      >> 'when the input is true' {
-        tmp E:MY-VAR = 'true'
-
-        >> 'when mandatory' {
-          input:bool MY-VAR |
-            should-be &strict $true
-        }
-
-        >> 'when optional' {
-          input:bool &optional MY-VAR |
-            should-be &strict $true
-        }
-      }
+      run-single-value-tests $input:bool~ true $true
 
       >> 'when the input is false' {
         tmp E:MY-VAR = 'false'
@@ -234,36 +126,6 @@ fake-context:within github {
         >> 'when optional' {
           input:bool &optional MY-VAR |
             should-be &strict $false
-        }
-      }
-
-      >> 'when there are only spaces' {
-        tmp E:MY-VAR = "       \t   \n                 "
-
-        >> 'when mandatory' {
-          fails {
-            input:bool MY-VAR
-          } |
-            should-be 'Missing input: MY-VAR'
-        }
-
-        >> 'when optional' {
-          input:bool &optional MY-VAR |
-            should-be $nil
-        }
-      }
-
-      >> 'when there are leading and trailing spaces' {
-        tmp E:MY-VAR = '           true   '
-
-        >> 'when mandatory' {
-          input:bool MY-VAR |
-            should-be &strict $true
-        }
-
-        >> 'when optional' {
-          input:bool &optional MY-VAR |
-            should-be &strict $true
         }
       }
 
@@ -289,49 +151,11 @@ fake-context:within github {
     >> 'enum' {
       var admissible = [alpha beta gamma]
 
-      >> 'when the input is missing' {
-        >> 'when mandatory' {
-          fails {
-            input:enum SOME-INEXISTING-VAR $admissible
-          } |
-            should-be 'Missing input: SOME-INEXISTING-VAR'
-        }
-
-        >> 'when optional' {
-          input:enum &optional SOME-INEXISTING-VAR $admissible |
-            should-be $nil
-        }
+      var processor = { |&optional=$false var-name|
+        input:enum &optional=$optional $var-name $admissible
       }
 
-      >> 'when the input is empty' {
-        tmp E:MY-VAR = ''
-
-        >> 'when mandatory' {
-          fails {
-            input:enum MY-VAR $admissible
-          } |
-            should-be 'Missing input: MY-VAR'
-        }
-
-        >> 'when optional' {
-          input:enum &optional MY-VAR $admissible |
-            should-be $nil
-        }
-      }
-
-      >> 'when the input is one of the values' {
-        tmp E:MY-VAR = $admissible[1]
-
-        >> 'when mandatory' {
-          input:enum MY-VAR $admissible |
-            should-be &strict $admissible[1]
-        }
-
-        >> 'when optional' {
-          input:enum &optional MY-VAR $admissible |
-            should-be &strict $admissible[1]
-        }
-      }
+      run-single-value-tests $processor beta beta
 
       >> 'when the input is not one of the values' {
         tmp E:MY-VAR = 'some-other-value'
@@ -350,46 +174,23 @@ fake-context:within github {
             should-be 'Invalid enum value for the ''MY-VAR'' input: ''some-other-value'''
         }
       }
-
-      >> 'when there are only spaces' {
-        tmp E:MY-VAR = "       \t   \n                 "
-
-        >> 'when mandatory' {
-          fails {
-            input:enum MY-VAR $admissible
-          } |
-            should-be 'Missing input: MY-VAR'
-        }
-
-        >> 'when optional' {
-          input:enum &optional MY-VAR $admissible |
-            should-be $nil
-        }
-      }
-
-      >> 'when there are leading and trailing spaces' {
-        tmp E:MY-VAR = '           '$admissible[1]'   '
-
-        >> 'when mandatory' {
-          input:enum MY-VAR $admissible |
-            should-be &strict $admissible[1]
-        }
-
-        >> 'when optional' {
-          input:enum &optional MY-VAR $admissible |
-            should-be &strict $admissible[1]
-        }
-      }
     }
 
     >> 'list' {
       >> 'when the input is missing' {
         input:list SOME-INEXISTING-VAR |
-          should-be []
+          should-be &strict []
       }
 
       >> 'when the input is empty' {
         tmp E:MY-VAR = ''
+
+        input:list MY-VAR |
+          should-be &strict []
+      }
+
+      >> 'when there are only spaces' {
+        tmp E:MY-VAR = "       \t   \n                 "
 
         input:list MY-VAR |
           should-be []
@@ -414,14 +215,7 @@ fake-context:within github {
           ]
       }
 
-      >> 'when there are only spaces' {
-        tmp E:MY-VAR = "       \t   \n                 "
-
-        input:list MY-VAR |
-          should-be []
-      }
-
-      >> 'when there are leading and trailing spaces' {
+      >> 'when there are multiple items, with leading and trailing spaces' {
         tmp E:MY-VAR = "           alpha,    \t    beta,gamma      , delta     "
 
         input:list MY-VAR |
@@ -445,7 +239,7 @@ fake-context:within github {
       }
 
       >> 'when there are empty items' {
-        tmp E:MY-VAR = ',   alpha,,,,beta,,gamma,   '
+        tmp E:MY-VAR = ',   alpha,,,,beta,,gamma,   ,'
 
         input:list MY-VAR |
           should-be [
