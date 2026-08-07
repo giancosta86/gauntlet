@@ -2,7 +2,7 @@ use ./env
 
 >> 'GitHub' {
   >> 'env' {
-    >> 'writing once' {
+    >> 'setting a value' {
       fs:with-temp-file { |temp-file|
         tmp E:GITHUB_ENV = $temp-file
 
@@ -15,7 +15,7 @@ use ./env
       }
     }
 
-    >> 'writing multiple values' {
+    >> 'setting multiple values' {
       fs:with-temp-file { |temp-file|
         tmp E:GITHUB_ENV = $temp-file
 
