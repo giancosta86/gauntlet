@@ -9,11 +9,7 @@ fn create-draft { |tag title|
   -gh release create $tag --draft --title $title --generate-notes
 }
 
-fn upload-artifacts { |inputs|
-  var release-tag = $inputs[release-tag]
-  var files = $inputs[files]
-  var overwrite = $inputs[overwrite]
-
+fn upload-artifacts { |&overwrite=$false release-tag @files|
   if (seq:is-empty $files) {
     fail 'No files declared!'
   }

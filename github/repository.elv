@@ -10,6 +10,6 @@ fn get-name {
     drop 1
 }
 
-fn get-root-directory {
+fn get-root-dir {
   get-env GITHUB_WORKSPACE
 }

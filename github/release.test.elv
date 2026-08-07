@@ -1,17 +1,10 @@
+use ../tests/fake-gh
 use ./release
-
-fn with-test-gh { |block|
-  var spy = (command:spy)
-
-  tmp release:-gh~ = $spy[command]
-
-  $block $spy
-}
 
 >> 'GitHub' {
   >> 'release' {
     >> 'creation' {
-      with-test-gh { |spy|
+      fake-gh:apply { |spy|
         release:create-draft v7 'Test title'
 
         $spy[get-runs] |
@@ -31,15 +24,8 @@ fn with-test-gh { |block|
 
     >> 'artifact uploading' {
       >> 'when not overwriting' {
-        with-test-gh { |spy|
-          release:upload-artifacts [
-            &files=[
-              alpha.txt
-              beta.jpg
-            ]
-            &release-tag=v7
-            &overwrite=$false
-          ]
+        fake-gh:apply { |spy|
+          release:upload-artifacts v7 alpha.txt beta.jpg
 
           $spy[get-runs] |
             should-be [
@@ -55,16 +41,8 @@ fn with-test-gh { |block|
       }
 
       >> 'when overwriting' {
-        with-test-gh { |spy|
-          release:upload-artifacts [
-            &files=[
-              ro.png
-              sigma.png
-              tau.pdf
-            ]
-            &release-tag=v7
-            &overwrite=$true
-          ]
+        fake-gh:apply { |spy|
+          release:upload-artifacts &overwrite v7 ro.png sigma.png tau.pdf
 
           $spy[get-runs] |
             should-be [

@@ -1,14 +1,27 @@
 use path
 use ./context
 
-var repository: = (context:use-mod repository)
+var dual: = (src | context:use-dual-mod)
 
-var get-full-name~ = $repository:get-full-name~
+#
+# Returns the full name of the current repository.
+#
+# For example, `giancosta86/ethereal`.
+#
+var get-full-name~ = $dual:get-full-name~
 
-var get-name~ = $repository:get-name~
+# Returns the main name of the current repository.
+#
+# For example, `ethereal`.
+#
+var get-name~ = $dual:get-name~
 
+#
+# Passed without arguments, returns the root directory of the current repository;
+# for any additional argument, appends it as a path component.
+#
 fn get-path { |@sub-path-components|
-  var root-directory = (repository:get-root-directory)
+  var root-directory = (dual:get-root-dir)
 
   path:join $root-directory $@sub-path-components
 }
