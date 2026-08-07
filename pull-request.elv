@@ -1,5 +1,8 @@
 use ./context
 
-var pull-request: = (context:use-mod pull-request)
+var dual: = (src | context:use-dual-mod)
 
-var get-branch~ = $pull-request:get-branch~
+#
+# Emits the branch of the current pull request; otherwise, emits $nil.
+#
+var get-branch~ = $dual:get-branch~

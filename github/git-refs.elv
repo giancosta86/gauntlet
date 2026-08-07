@@ -4,7 +4,6 @@ use ./pull-request
 
 fn get-current {
   pull-request:get-branch |
-    seq:empty-to-default |
     lang:otherwise {
       get-env GITHUB_REF
     }

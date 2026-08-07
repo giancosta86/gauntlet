@@ -7,11 +7,11 @@ use ./pull-request
         tmp E:GITHUB_HEAD_REF = ''
 
         pull-request:get-branch |
-          should-be ''
+          should-be $nil
       }
 
       >> 'when in a pull request' {
-        tmp E:GITHUB_HEAD_REF = 'dodo'
+        tmp E:GITHUB_HEAD_REF = dodo
 
         pull-request:get-branch |
           should-be dodo

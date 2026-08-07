@@ -1,5 +1,8 @@
 use ./context
 
-var git-refs: = (context:use-mod git-refs)
+var dual: = (src | context:use-dual-mod)
 
-var get-current~ = $git-refs:get-current~
+#
+# Returns the current Git ref - be it inside or outside of a pull request.
+#
+var get-current~ = $dual:get-current~

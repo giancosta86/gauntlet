@@ -1,7 +1,5 @@
+use github.com/giancosta86/ethereal/v1/seq
+
 fn get-branch {
-  if (has-env GITHUB_HEAD_REF) {
-    get-env GITHUB_HEAD_REF
-  } else {
-    put ''
-  }
+  seq:empty-to-default $E:GITHUB_HEAD_REF
 }
