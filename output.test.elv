@@ -4,9 +4,9 @@ fake-context:within github {
   use ./output
 
   >> 'Output' {
-    >> 'writing a value' {
+    >> 'setting a value' {
       fs:with-temp-file { |temp-file|
-        set-env GITHUB_OUTPUT $temp-file
+        tmp E:GITHUB_OUTPUT = $temp-file
 
         put $true |
           output:set alpha
@@ -18,7 +18,7 @@ fake-context:within github {
 
     >> 'mapping values' {
       fs:with-temp-file { |temp-file|
-        set-env GITHUB_OUTPUT $temp-file
+        tmp E:GITHUB_OUTPUT = $temp-file
 
         output:map [
           &alpha=$true

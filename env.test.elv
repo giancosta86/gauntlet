@@ -4,9 +4,9 @@ fake-context:within github {
   use ./env
 
   >> 'Env' {
-    >> 'writing a value' {
+    >> 'setting a value' {
       fs:with-temp-file { |temp-file|
-        set-env GITHUB_ENV $temp-file
+        tmp E:GITHUB_ENV = $temp-file
 
         put $true |
           env:set alpha
@@ -25,7 +25,7 @@ fake-context:within github {
 
     >> 'mapping values' {
       fs:with-temp-file { |temp-file|
-        set-env GITHUB_ENV $temp-file
+        tmp E:GITHUB_ENV = $temp-file
 
         env:map [
           &alpha=$false
