@@ -3,7 +3,7 @@ use ./context
 
 var dual: = (src | context:use-dual-mod)
 
-var git-refs: = (context:use-mod git-refs)
+var branches: = (context:use-mod branches)
 
 var repository: = (context:use-mod repository)
 
@@ -14,7 +14,7 @@ var repository: = (context:use-mod repository)
 fn get-to-other-branches { |&colors=$false|
   var full-repository-name = (repository:get-full-name)
 
-  var current-branch = (git-refs:get-current)
+  var current-branch = (branches:get-current)
 
   var regex = (dual:get-perl-regex-to-other-branches $full-repository-name $current-branch)
 

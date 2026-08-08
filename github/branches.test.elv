@@ -1,4 +1,4 @@
-use ./git-refs
+use ./branches
 
 >> 'GitHub' {
   >> 'Git references' {
@@ -7,7 +7,7 @@ use ./git-refs
 
       tmp E:GITHUB_REF = beta
 
-      git-refs:get-current |
+      branches:get-current |
         should-be beta
     }
 
@@ -16,7 +16,7 @@ use ./git-refs
 
       tmp E:GITHUB_REF = beta
 
-      git-refs:get-current |
+      branches:get-current |
         should-be alpha
     }
   }

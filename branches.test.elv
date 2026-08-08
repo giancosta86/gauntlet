@@ -1,7 +1,7 @@
 use ./tests/fake-context
 
 fake-context:within github {
-  use ./git-refs
+  use ./branches
 
   >> 'Detecting the current Git ref' {
     >> 'when not in pull request' {
@@ -9,7 +9,7 @@ fake-context:within github {
 
       tmp E:GITHUB_REF = beta
 
-      git-refs:get-current |
+      branches:get-current |
         should-be beta
     }
 
@@ -18,7 +18,7 @@ fake-context:within github {
 
       tmp E:GITHUB_REF = beta
 
-      git-refs:get-current |
+      branches:get-current |
         should-be alpha
     }
   }
