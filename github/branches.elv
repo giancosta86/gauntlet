@@ -1,5 +1,4 @@
 use github.com/giancosta86/ethereal/v1/lang
-use github.com/giancosta86/ethereal/v1/seq
 use ./pull-request
 
 fn get-current {
