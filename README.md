@@ -1,16 +1,20 @@
-# gauntlet
+# Gauntlet
 
 _Elvish toolkit for CI/CD actions_
 
-**gauntlet** is both:
+**Gauntlet** is both:
 
-- an **Elvish** library, for _common CI/CD tasks_
+- an **Elvish** library, for _common CI/CD action tasks_
 
-- a set of CI/CD **actions** - to install Elvish and simplify the creation of **Elvish-based actions**
+- a set of CI/CD **actions** - to install **Elvish** and simplify the creation of **Elvish-based actions**
 
-At present, only [GitHub Actions](https://docs.github.com/en/actions) is supported - but more architectures will be added in the future.
+At present, only [GitHub Actions](https://docs.github.com/en/actions) is supported, but the architecture can be easily extended.
 
 ![Logo](logo.jpg)
+
+## Why Gauntlet?
+
+**Gauntlet** stems from the development of the 11th version of [aurora-github](https://github.com/giancosta86/aurora-github) - my _CD/CD gallery of GitHub Actions_: when porting the codebase from Bash to **Elvish**, I felt the need for isolating the _architecture-specific details_ into a _tiny kernel_, thus focusing just on the _business logic_ while developing actions.
 
 ## Installation
 
@@ -20,15 +24,15 @@ The actions are designed to simplify the usage of the **Elvish** shell in a CI/C
 
 ### Elvish library
 
-The Elvish library is dedicated to the implementation of custom **composite actions** based on **Elvish**; most of the times, it can be accessed by referencing [setup-elvish-action](actions/setup-elvish-action/README.md) from within your composite action:
+The Elvish library is dedicated to the implementation of custom **composite actions** based on **Elvish**; it can almost always be accessed by referencing [setup-elvish-action](actions/setup-elvish-action/README.md) from within any composite action:
 
 ```yaml
 - uses: giancosta86/gauntlet/actions/setup-elvish-action@v1
 ```
 
-After that, the `github.com/giancosta86/gauntlet/v1` package will be available in any Elvish-based `run:` step or - even better - in _any script imported by such blocks_.
+After that, the `github.com/giancosta86/gauntlet/v1` package will be available in any Elvish-based `run:` step or - even better - in _any script executed within the current job_.
 
-Please, refer to [setup-elvish-action](actions/setup-elvish-action/README.md) for more details.
+Please, refer to [setup-elvish-action](actions/setup-elvish-action/README.md) for more details - as well as the actual implementation of the actions in [aurora-github](https://github.com/giancosta86/aurora-github), starting from **version 11**.
 
 ## Usage
 
@@ -36,9 +40,9 @@ Please, refer to [setup-elvish-action](actions/setup-elvish-action/README.md) fo
 
 The following actions for GitHub Actions are currently provided:
 
-- [setup-elvish-context](actions/setup-elvish-context/README.md) - to install Elvish
+- [setup-elvish-context](actions/setup-elvish-context/README.md) - to install Elvish.
 
-- [setup-elvish-action](actions/setup-elvish-action/README.md): like **setup-elvish-context**, but also installing fundamental libraries and creating a symbolic link to a core directory shared by all the **Elvish**-based actions in the same repository.
+- [setup-elvish-action](actions/setup-elvish-action/README.md): like **setup-elvish-context**, but also installing _fundamental libraries_ and _creating a symbolic link_ to a **core directory** shared by all the **Elvish**-based actions in the same repository.
 
 ### Library
 
@@ -46,13 +50,13 @@ Most modules require an existing CI/CD architecture even to be imported - becaus
 
 The most important ones are:
 
-- [input](input.elv) - to read input from CI/CD; for example, on GitHub Actions, it is recommended to pass inputs as _environment variables_ via the `env:` block
+- [input](input.elv) - to **read input** from CI/CD; for example, on GitHub Actions, it is required to pass inputs as _environment variables_ via the `env:` block
 
-- [output](output.elv) - to output values from the current CI/CD step
+- [output](output.elv) - to **output values** from the current CI/CD step
 
-- [env](env.elv) - to persist values as CI/CD environment variables
+- [env](env.elv) - to persist values as CI/CD **environment variables**
 
-Other modules may sound a bit more exotic:
+Other modules are probably less frequently used:
 
 - [action-references](action-references.elv)
 
@@ -64,14 +68,16 @@ Other modules may sound a bit more exotic:
 
 - [repository](repository.elv)
 
-Please, refer to the documentation comments - and even more to the test suites, written in [Velvet](https://github.com/giancosta86/velvet), for further details.
+Please, refer to the documentation comments - and even more to the test suites, written in [Velvet](https://github.com/giancosta86/velvet) - for further details.
 
-Last but not least, the [context](context.elv) module is the most sophisticated, because it allows you to import submodules with low-level plumbing functions targeting the current CI/CD .
+Last but not least, the [context](context.elv) module is perhaps the most sophisticated, because it allows one to _import submodules_ with _low-level functions_ targeting the current CI/CD .
 
 ## Credits
 
 - Logo generated by **Gemini** and manually edited via **GIMP**.
 
 ## Further references
+
+- [aurora-github](https://github.com/giancosta86/aurora-github)
 
 - [GitHub Actions](https://docs.github.com/en/actions)
