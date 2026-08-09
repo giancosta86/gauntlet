@@ -1,0 +1,16 @@
+name: Test setup-elvish-context
+description: Tests for setup-elvish-context.
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: echo "🎭 Setting up an Elvish context..."
+
+    - uses: ./actions/setup-elvish-context
+
+    - shell: elvish {0}
+      run: |
+        var message = '✅ Elvish confirms: the shell is ready! 🚀'
+
+        echo $message

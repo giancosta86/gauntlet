@@ -8,27 +8,58 @@ on:
   workflow_dispatch:
 
 jobs:
-  verify:
+  verify-library:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: elves/setup-elvish@v1
+      - shell: bash
+        run: curl -so - https://dl.elv.sh/linux-amd64/elvish-v0.21.0.tar.gz | tar -xzC /usr/local/bin
+
+      - uses: giancosta86/epm-plus/actions/install-elvish-packages@v1
         with:
-          elvish-version: 0.21.0
+          packages: github.com/giancosta86/velvet@v4
 
       - shell: elvish {0}
         run: |
-          use epm
-
-          epm:install github.com/giancosta86/epm-plus
-
-          use github.com/giancosta86/epm-plus/epm-plus
-
-          epm-plus:patch-epm
-
-          epm:install
-
           use github.com/giancosta86/velvet/v4/velvet
 
           velvet:velvet &flawless
+
+  test-setup-elvish-context:
+    runs-on: ubuntu-24.04
+    needs:
+      - verify-library
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/test-actions/test-setup-elvish-context
+
+  test-setup-elvish-action:
+    runs-on: ubuntu-24.04
+    needs:
+      - test-setup-elvish-context
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/test-actions/test-setup-elvish-action
+
+  verify-github-actions:
+    runs-on: ubuntu-24.04
+    needs:
+      - test-setup-elvish-context
+      - test-setup-elvish-action
+    steps:
+      - uses: actions/checkout@v7
+
+      - shell: bash
+        run: echo ✅ All actions tested!
+
+  verify:
+    runs-on: ubuntu-24.04
+    needs:
+      - verify-library
+      - verify-github-actions
+    steps:
+      - shell: bash
+        run: echo '✅ All tests OK!'

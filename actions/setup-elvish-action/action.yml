@@ -1,0 +1,45 @@
+name: Setup an Elvish action
+description: Sets up the environment for a GitHub action written in Elvish.
+
+inputs:
+  elvish-version:
+    description: Elvish version to install.
+    default: 0.21.0
+
+  ethereal-version:
+    description: Ethereal version to install - or empty string to skip.
+    default: v1
+
+  gauntlet-version:
+    description: Gauntlet version to install - or empty string to skip.
+    default: v1
+
+  core-package:
+    description: Elvish package referencing the core for CI/CD actions.
+
+  core-directory:
+    description: Directory containing the core for CI/CD actions.
+
+runs:
+  using: composite
+  steps:
+    - uses: giancosta86/gauntlet/actions/setup-elvish-context@v1.0.0
+      with:
+        version: ${{ inputs.elvish-version }}
+
+    - if: inputs.ethereal-version != ''
+      uses: giancosta86/epm-plus/actions/install-elvish-packages@v1
+      with:
+        packages: github.com/giancosta86/ethereal@${{ inputs.ethereal-version }}
+
+    - if: inputs.gauntlet-version != ''
+      uses: giancosta86/epm-plus/actions/install-elvish-packages@v1
+      with:
+        packages: github.com/giancosta86/gauntlet@${{ inputs.gauntlet-version }}
+
+    - if: inputs.core-directory != ''
+      shell: bash
+      run: elvish ${{ github.action_path }}/core-setup.elv
+      env:
+        core-package: ${{ inputs.core-package }}
+        core-directory: ${{ inputs.core-directory }}
