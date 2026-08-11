@@ -13,18 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - shell: bash
-        run: curl -so - https://dl.elv.sh/linux-amd64/elvish-v0.21.0.tar.gz | tar -xzC /usr/local/bin
-
-      - uses: giancosta86/epm-plus/actions/install-elvish-packages@v1
-        with:
-          packages: github.com/giancosta86/velvet@v4
-
-      - shell: elvish {0}
-        run: |
-          use github.com/giancosta86/velvet/v4/velvet
-
-          velvet:velvet &flawless
+      - uses: giancosta86/aurora-github/actions/run-elvish-tests@v11
 
   test-setup-elvish-context:
     runs-on: ubuntu-24.04
@@ -50,10 +39,9 @@ jobs:
       - test-setup-elvish-context
       - test-setup-elvish-action
     steps:
-      - uses: actions/checkout@v7
-
-      - shell: bash
-        run: echo ✅ All actions tested!
+      - uses: giancosta86/aurora-github/actions/check-required-jobs@v11
+        with:
+          needs-as-json: ${{ toJSON(needs) }}
 
   verify:
     runs-on: ubuntu-24.04
@@ -61,5 +49,6 @@ jobs:
       - verify-library
       - verify-github-actions
     steps:
-      - shell: bash
-        run: echo '✅ All tests OK!'
+      - uses: giancosta86/aurora-github/actions/check-required-jobs@v11
+        with:
+          needs-as-json: ${{ toJSON(needs) }}
