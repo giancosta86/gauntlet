@@ -1,0 +1,17 @@
+name: Deploy
+
+on:
+  pull_request:
+    types: closed
+    branches: main
+
+jobs:
+  tag-and-release:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: giancosta86/aurora-github/actions/tag-and-release@v11
+        with:
+          product-name: Gauntlet
