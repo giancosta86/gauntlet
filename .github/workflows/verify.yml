@@ -37,8 +37,8 @@ jobs:
       - test-setup-elvish-context
       - test-setup-elvish-action
     steps:
-      - shell: elvish {0}
-        run: echo ✅ Actions OK!
+      - shell: bash
+        run: echo '✅ Actions OK!'
 
   verify:
     runs-on: ubuntu-24.04
