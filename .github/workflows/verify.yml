@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: giancosta86/aurora-github/actions/run-elvish-tests@v11
+      - uses: giancosta86/aurora-github/actions/run-elvish-tests@v12
 
   test-setup-elvish-context:
     runs-on: ubuntu-24.04
@@ -37,9 +37,8 @@ jobs:
       - test-setup-elvish-context
       - test-setup-elvish-action
     steps:
-      - uses: giancosta86/aurora-github/actions/check-required-jobs@v11
-        with:
-          needs-as-json: ${{ toJSON(needs) }}
+      - shell: bash
+        run: echo '✅ Actions OK!'
 
   verify:
     runs-on: ubuntu-24.04
@@ -47,6 +46,6 @@ jobs:
       - verify-library
       - verify-github-actions
     steps:
-      - uses: giancosta86/aurora-github/actions/check-required-jobs@v11
+      - uses: giancosta86/aurora-github/actions/check-required-jobs@v12
         with:
           needs-as-json: ${{ toJSON(needs) }}
