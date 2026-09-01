@@ -49,5 +49,33 @@ fake-context:within github {
         }
       }
     }
+
+    >> 'cascading values' {
+      >> 'when the variable exists' {
+        fs:with-temp-file { |temp-file|
+          tmp E:GITHUB_ENV = $temp-file
+
+          tmp E:ALPHA-PROP = 'Dodo'
+
+          env:cascade ALPHA-PROP
+
+          to-lines < $temp-file |
+            should-emit [
+              'ALPHA-PROP=Dodo'
+            ]
+        }
+      }
+
+      >> 'when the variable does not exist' {
+        fs:with-temp-file { |temp-file|
+          tmp E:GITHUB_ENV = $temp-file
+
+          env:cascade ALPHA-INEXISTENT
+
+          slurp < $temp-file |
+            should-be ''
+        }
+      }
+    }
   }
 }
