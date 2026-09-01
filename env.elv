@@ -27,3 +27,16 @@ fn map { |@arguments|
   lang:get-single-input $arguments |
     map:iterate $set~
 }
+
+#
+# If the given environment variable exists in the current step,
+# propagate it to downstream steps.
+#
+fn cascade { |@arguments|
+  var var-name = (lang:get-single-input $arguments)
+
+  if (has-env $var-name) {
+    get-env $var-name |
+      $set~ $var-name (all)
+  }
+}
